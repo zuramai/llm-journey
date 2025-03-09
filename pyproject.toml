@@ -1,0 +1,39 @@
+[project]
+name = "llm-journey"
+version = "0.1.0"
+description = "Implement a ChatGPT-like LLM in PyTorch from scratch, step by step"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.3.0",
+    "jupyterlab>=4.0",
+    "tiktoken>=0.5.1",
+    "matplotlib>=3.7.1",
+    "tensorflow>=2.18.0",
+    "tqdm>=4.66.1",
+    "numpy>=1.26,<2.1",
+    "pandas>=2.2.1",
+    "pip>=25.0.1",
+]
+
+[tool.setuptools.packages]
+find = {}
+
+[tool.uv.sources]
+llms-from-scratch = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "llm-journey",
+]
+
+[tool.ruff]
+line-length = 140
+
+[tool.ruff.lint]
+exclude = [".venv"]
+# Ignored rules (W504 removed)
+ignore = [
+    "C406", "E226", "E402", "E702", "E703",
+    "E722", "E731", "E741"
+]
