@@ -52,3 +52,16 @@ Researchers add special token to mark a point in text or to represent something,
 - `[BOS]` (*beginning of sequence*) this token marks the start of a text.
 - `[EOS]` (*end of sequence*) this token marks the end of a text. Same like `<|endoftext|>`
 - `[PAD]` (*padding*) when training LLM, if you have two batch that contains different size of length, we need to make the length equal by making the shorter text to be longer by filling it with `[PAD]`.
+
+Note: GPT models don't use any of these token. Instead, they use *byte-pair encoding* tokenizer, which breaks words down into subword unit.
+
+## Byte-pair Encoding
+
+We will use [tiktoken](https://github.com/openai/tiktoken) byte-pair encoding (BPE).
+
+Unlike our SimpleTokenizer, tiktoken can encode and decode any unknown words. Instead of just changing it into something like `<|unk|>`, tiktoken breaks down unknown word into subwords and characters. Look at this example: 
+
+![tiktoken-subwords](tiktoken-subwords.png)
+
+## Data sampling with sliding window
+
