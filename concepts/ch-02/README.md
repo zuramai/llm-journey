@@ -63,5 +63,3 @@ Unlike our SimpleTokenizer, tiktoken can encode and decode any unknown words. In
 
 ![tiktoken-subwords](tiktoken-subwords.png)
 
-## Data sampling with sliding window
-
