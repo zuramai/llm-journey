@@ -85,4 +85,73 @@ print("Sum:", attn_weights_2_tmp.sum()) # this will output 1
 # Sum: tensor(1.0000)
 ```
 
-Usually it's advisable to use softmax function for normalization. But this way is better to manage extreme values and better gradient properties during training.
+Usually it's advisable to use softmax (`torch.softmax`) function for normalization. But this way is better to manage extreme values and better gradient properties during training.
+
+
+### Getting Context Vectors
+
+![](steps.png)
+
+Before computing attention scores, we already have weights for each element in a sentence. After that, we compute the attention scores.
+
+1. Compute Attention Scores
+
+Attention score is a score between two element by getting the dot product between two element's embeddings. To get each elements' attention score to each element, we can do dot product for each of them and be N x N matrix where N is number of elements.
+
+Code to get it:
+```py
+attn_scores = torch.empty(6, 6) # assume the input element count is 6
+for i, x_i in enumerate(inputs):
+    for j, x_j in enumerate(inputs):
+        attn_scores[i, j] = torch.dot(x_i, x_j)
+print(attn_scores)
+```
+
+simplified version:
+```py
+attn_scores = inputs @ inputs.T
+```
+
+Here, `@`  is matrix multiplication.
+
+2. Compute Attention Weight
+
+After we got the matrix result:
+
+```py
+tensor([[0.9995, 0.9544, 0.9422, 0.4753, 0.4576, 0.6310],
+        [0.9544, 1.4950, 1.4754, 0.8434, 0.7070, 1.0865],
+        [0.9422, 1.4754, 1.4570, 0.8296, 0.7154, 1.0605],
+        [0.4753, 0.8434, 0.8296, 0.4937, 0.3474, 0.6565],
+        [0.4576, 0.7070, 0.7154, 0.3474, 0.6654, 0.2935],
+        [0.6310, 1.0865, 1.0605, 0.6565, 0.2935, 0.9450]])
+```
+
+Now we compute attention weight by normalizing it using softmax.
+
+```py
+attn_weights = torch.softmax(attn_scores, dim=1)
+print(attn_weights)
+```
+
+The `dim=-1` means we calculate the softmax from the last dimension. Here, the dimension is `[rows, columns]`, so it means we are softmaxing the column (if we sum each row it will sum up to 1).
+
+Normalizing using softmax is to get the probability distribution.
+
+```
+tensor([[0.2098, 0.2006, 0.1981, 0.1242, 0.1220, 0.1452],
+        [0.1385, 0.2379, 0.2333, 0.1240, 0.1082, 0.1581],
+        [0.1390, 0.2369, 0.2326, 0.1242, 0.1108, 0.1565],
+        [0.1435, 0.2074, 0.2046, 0.1462, 0.1263, 0.1720],
+        [0.1526, 0.1958, 0.1975, 0.1367, 0.1879, 0.1295],
+        [0.1385, 0.2184, 0.2128, 0.1420, 0.0988, 0.1896]])
+```
+
+3. Compute Context Vectors
+
+After we got the attention weight, we multiply back with original input embeddings.
+
+```py
+all_context_vecs = attn_weights @ inputs
+print(all_context_vecs)
+```
