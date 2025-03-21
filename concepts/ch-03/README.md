@@ -87,6 +87,8 @@ print("Sum:", attn_weights_2_tmp.sum()) # this will output 1
 
 Usually it's advisable to use softmax (`torch.softmax`) function for normalization. But this way is better to manage extreme values and better gradient properties during training.
 
+![](normalized.png)
+
 
 ### Getting Context Vectors
 
@@ -155,3 +157,116 @@ After we got the attention weight, we multiply back with original input embeddin
 all_context_vecs = attn_weights @ inputs
 print(all_context_vecs)
 ```
+
+**Why do we multiply the `attn_weights` back to the `inputs`?**
+
+
+
+## Three Trainable Weights
+
+The three trainable weights $W_q$, $W_k$, and $W_v$ are matrices to project the input tokens into query, key, and value vectors.
+
+In this part of code, we create three trainable weights with random values.
+
+```py
+torch.manual_seed(123)
+W_query = torch.nn.Parameter(torch.rand(d_in, d_out), requires_grad=False)
+W_key = torch.nn.Parameter(torch.rand(d_in, d_out), requires_grad=False)
+W_value = torch.nn.Parameter(torch.rand(d_in, d_out), requires_grad=False)
+```
+
+The output of `print(W_query)` is:
+
+```
+tensor([[0.2961, 0.5166],
+        [0.2517, 0.6886],
+        [0.0740, 0.8665]])
+```
+
+
+It will create a tensor with dimension `[d_in, d_out]`.
+
+### Compute the query, key, and value vectors
+
+To compute the vectors, we multiply the actual input data to the created weight that has a random value.
+
+```
+query_2 = x_2 @ W_query
+key_2 = x_2 @ W_key
+value_2 = x_2 @ W_value
+```
+
+*Remember, @ is a matrix multiplication*
+
+### Difference between weight parameters and attention weights
+
+
+| Feature          | Weight Parameters (e.g., `W_query`) | Attention Weights                   |
+| ---------------- | ------------------------------------ | ----------------------------------- |
+| **Trainable?**   | Yes                                 | No                                  |
+| **Values**       | Learned during training             | Computed dynamically during forward pass |
+| **Role**         | Transform input into different spaces | Represent importance/relevance       |
+| **Update**       | Updated by the optimizer             | Not directly updated              |
+
+
+
+## Getting the attention scores
+
+In earlier chapter, to get the attention scores, we just multiply the embeddings of a token to other embeddings. Now, each token has Q, K, and V. We multiply query (Q) and key (K).
+
+First, we get the keys and values for each inputs.
+```py
+keys = inputs @ W_key
+values = inputs @ W_value
+```
+
+In this example, we want to try getting the attention_scores for `query_2` (which is from `inputs[1]`). We can just multiply the matrix `query_2` to `keys.T`
+
+```py
+attn_scores_2 = query_2 @ keys.T
+print(attn_scores_2)
+```
+
+ouptut: 
+
+```
+tensor([1.2705, 1.8524, 1.8111, 1.0795, 0.5577, 1.5440])
+```
+
+### Next, get the attention weights
+
+In earlier example, we get the attention weights by softmaxing the attention scores. Now we'll do softmax but with additional square root.
+
+```py
+d_k = keys.shape[-1] # d_k = 2
+attn_weights_2 = torch.softmax(attn_scores_2 / d_k ** 0.5, dim=-1)
+print(attn_weights_2)
+# output:
+# tensor([0.1500, 0.2264, 0.2199, 0.1311, 0.0906, 0.1820])
+```
+
+Why do we need to divide it by `d_k ** 0.5`. We can achieve square root by exponentiating number by `0.5`. 
+
+But why should we exponentiating it by 0.5?
+
+This is called **scaled dot-product attention**.
+
+explanation:
+```
+As the dimension (d_k) of the key vectors grows larger, the dot products tend to grow larger in magnitude. This is because we're summing up more terms in the dot product.
+
+When the dot products become too large, they push the softmax function into regions where it has extremely small gradients (the "saturated" regions). This leads to what's called the "vanishing gradient problem."
+
+By dividing by √d_k, we effectively normalize the dot products to have variance of approximately 1, regardless of the dimension size. This helps keep the dot products in a reasonable range where the softmax function's gradients are still effective.
+```
+
+### Final step, compute the context vectors
+
+In earlier example, we compute the context vectors by multiplying the attention weights by the initial inputs. Now, we multiply the attention_weights by the values. Note: `values` is the result of multiplicaton of `W_values` and `inputs`.
+
+```py
+context_vec_2 = attn_weights_2 @ values
+print(context_vec_2)
+# output: tensor([0.3061, 0.8210])
+```
+
