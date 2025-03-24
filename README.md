@@ -6,3 +6,8 @@ This repository contains my journey of learning to build my own LLM from scratch
 
 - `concepts` directory contains my own interpretation of Raschka's explanation in the book, divided by chapters.
 - `exercises` directory contains the code to implement my own LLM.
+
+
+## Useful links
+
+- https://github.com/adalkiran/llama-nuts-and-bolts/blob/main/docs/20-DIAGRAMS.md
