@@ -1,0 +1,193 @@
+What is a context vector?;A numerical representation that combines how important a token is relative to other tokens in a sequence, created by multiplying values that represent token importance.
+
+What are embeddings in the context of LLMs?;Numerical representations of text that capture semantic meaning, allowing similar concepts to be positioned closer to each other in vector space.
+
+What is Word2Vec?;A popular embedding method that converts words to numerical representations, positioning semantically similar words closer in vector space.
+
+How many dimensions does the smallest GPT-2 model embedding use?;768 dimensions.
+
+How many dimensions does GPT-3 (175B) embedding use?;12288 dimensions.
+
+What is a tokenizer?;A component that converts input text into tokens (numerical IDs) that can be processed by a language model.
+
+What is byte-pair encoding (BPE)?;A subword tokenization algorithm that breaks words into smaller units, allowing models to handle unknown words by representing them as combinations of known subwords.
+
+What is the purpose of special tokens like <|endoftext|>?;To mark specific points in text or represent special meanings, such as indicating the end of a document.
+
+What is the [PAD] token used for?;To make sequences of different lengths equal by filling shorter sequences with padding tokens during training.
+
+What is the difference between [EOS] and <|endoftext|>?;They serve the same purpose of marking the end of a text sequence, just using different notation.
+
+What is the `forward()` method in PyTorch?;A method that describes how data flows through a neural network model.
+
+What is a transformer architecture composed of?;Encoder and decoder modules, with multiple layers in each, connected by a self-attention mechanism.
+
+What is the role of the encoder in a transformer?;To accept inputs and convert them to numerical representations (embedding vectors) that capture contextual information.
+
+What is the role of the decoder in a transformer?;To take encoded vectors and decode them to generate output text.
+
+What is self-attention?;A mechanism that allows tokens to attend to other tokens in a sequence, determining their relative importance for context understanding.
+
+What is the purpose of layer normalization in transformers?;To stabilize and speed up training by normalizing the inputs to each layer, making the mean 0 and variance 1.
+
+What is the dimensionality of context vectors relative to embeddings?;Context vectors have the same dimensionality as the embedding vectors they're derived from.
+
+How is a context vector calculated in self-attention?;By computing attention scores between tokens, applying softmax to get weights, and using these weights to combine value vectors.
+
+What are zero-shot learning capabilities in LLMs?;The ability to complete tasks without any examples or specific training for that task.
+
+What is few-shot learning in LLMs?;The ability to complete tasks with just a few specific examples provided in the prompt.
+
+What are the major datasets used to train GPT-3?;CommonCrawl, WebText, Books, and Wikipedia.
+
+What is emergent behavior in LLMs?;Capabilities that weren't explicitly trained for but emerge as a consequence of being exposed to vast amounts of data in many contexts.
+
+What is the approximate training cost of GPT-3?;$4.6 million in computing credits.
+
+What is retrieval-augmented generation (RAG)?;Using sentence embeddings to retrieve relevant information from a knowledge base to enhance generation.
+
+What is the difference between word embeddings and sentence embeddings?;Word embeddings represent individual words, while sentence embeddings capture the meaning of entire sentences.
+
+What is the purpose of positional embeddings?;To provide information about token position in a sequence, since self-attention has no inherent understanding of order.
+
+What is the maximum context length in GPT-2 (124M)?;1024 tokens.
+
+What does the "large" in Large Language Model refer to?;The size of the model, typically measured by the number of parameters.
+
+What is GELU activation?;Gaussian Error Linear Unit, an activation function used in many transformer models that smoothly combines linear and non-linear behavior.
+
+What is attention weight?;A scalar value that determines how much focus a token should place on other tokens in the sequence.
+
+What are the three key vectors in self-attention?;Query (Q), Key (K), and Value (V) vectors.
+
+How is the attention score calculated between tokens?;By computing the dot product between the query vector of one token and the key vector of another token.
+
+Why is scaling factor used in attention mechanism?;To prevent extremely small gradients during backpropagation by scaling down dot products by the square root of the embedding dimension.
+
+What is a multi-head attention mechanism?;A technique that allows the model to attend to information from different representation subspaces, using multiple sets of Q, K, V projections.
+
+How many attention heads does GPT-2 (124M) use?;12 attention heads.
+
+What is the dropout mechanism in transformers?;A regularization technique that randomly sets a fraction of input units to zero during training to prevent overfitting.
+
+What is the typical dropout rate in GPT-2?;0.1 (10%).
+
+What is the vocabulary size of GPT-2?;50,257 tokens.
+
+What is a transformer block?;A module containing self-attention and feed-forward layers, the basic building block of transformer architecture.
+
+How many transformer layers does GPT-2 (124M) have?;12 layers.
+
+What is the feed-forward network in a transformer?;A two-layer neural network applied to each position separately and identically, typically using a GELU activation.
+
+What is causal attention?;A form of self-attention where tokens can only attend to previous tokens (used in decoder-only models like GPT).
+
+What is the difference between encoder-only, decoder-only, and encoder-decoder transformers?;Encoder-only (like BERT) process input text, decoder-only (like GPT) generate text autoregressively, and encoder-decoder (like T5) transform input text to output text.
+
+What is the role of the softmax function in self-attention?;To convert attention scores into a probability distribution summing to 1, representing attention weights.
+
+What is a context window in LLMs?;The maximum number of tokens the model can process in a single pass, determined by positional embeddings.
+
+How does self-attention achieve permutation invariance?;It doesn't inherently understand token order, which is why positional embeddings must be added to token embeddings.
+
+What is the typical dimensionality of the feed-forward network's hidden layer relative to embedding size?;Usually 4 times the embedding dimension.
+
+What is the "attention is all you need" paper?;The seminal 2017 paper that introduced the transformer architecture, revolutionizing NLP.
+
+What are token embeddings?;Learned representations that convert token IDs into continuous vector representations.
+
+How is layer normalization different from batch normalization?;Layer normalization normalizes across features for each sample independently, while batch normalization normalizes across samples for each feature.
+
+What is the flow of data in a transformer block?;Input → Layer Norm → Self-Attention → Add & Norm → Feed-Forward → Add & Norm → Output.
+
+What is the "Add & Norm" component in transformers?;A residual connection followed by layer normalization, helping with gradient flow during training.
+
+How do transformer models handle variable-length sequences?;By using padding tokens and attention masking to ignore padding tokens.
+
+What is a decoder-only architecture?;A transformer architecture that only uses decoder blocks, typically for text generation tasks (like GPT models).
+
+How are GPT models trained initially?;Through self-supervised learning on a next-token prediction task (autoregressive language modeling).
+
+What is autoregressive generation?;Generating text one token at a time, where each new token is conditioned on all previously generated tokens.
+
+What is the role of attention masking in causal self-attention?;To prevent tokens from attending to future tokens during training and inference, maintaining the autoregressive property.
+
+How does a transformer model capture long-range dependencies?;Through the self-attention mechanism, which can directly connect any pair of positions in the sequence.
+
+What are the steps in the forward pass of a DummyGPTModel?;Token embedding lookup → Position embedding lookup → Combine embeddings → Apply dropout → Process through transformer blocks → Apply final layer norm → Project to vocabulary size.
+
+How does GPT-2 handle unknown words?;It uses byte-pair encoding to break unknown words into subwords that exist in its vocabulary.
+
+What is the computational complexity of self-attention with respect to sequence length?;O(n²), where n is the sequence length, as each token attends to all other tokens.
+
+How do positional embeddings capture sequence information?;By learning distinct vector representations for each position in the sequence, which are added to token embeddings.
+
+How is the output probability distribution computed in GPT models?;By applying a linear layer to the final hidden states followed by a softmax function over the vocabulary.
+
+What are the key differences between GPT-2 and GPT-3?;GPT-3 has significantly more parameters (175B vs 1.5B for largest GPT-2), larger embedding dimensions, more layers, and improved performance.
+
+What is the significance of the embedding dimension in transformer models?;It determines the model's capacity to represent information and is a key hyperparameter affecting model size.
+
+What is perplexity in language models?;A measure of how well a model predicts a text sample, calculated as the exponential of the average negative log-likelihood per token.
+
+What is beam search?;A decoding strategy that maintains multiple candidate sequences at each step to improve generation quality.
+
+What is temperature in text generation?;A parameter that controls randomness in generation by scaling logits before softmax; higher values produce more diverse outputs.
+
+What is the key innovation of transformers compared to RNNs?;The self-attention mechanism, which processes all tokens in parallel and captures dependencies regardless of distance.
+
+In a GPT model, what is the purpose of the final layer norm?;To normalize the representations before the output projection, stabilizing training and inference.
+
+How is the self-attention output combined with the input in a transformer block?;Through a residual connection, where the self-attention output is added to the original input.
+
+How does LayerNorm stabilize training in transformers?;By normalizing activations to have mean 0 and variance 1, reducing internal covariate shift.
+
+What are the three main operations in self-attention?;Computing attention scores, applying softmax to get weights, and weighted summation of value vectors.
+
+What is the matrix multiplication sequence in self-attention?;Q * K^T to get attention scores, then softmax, then multiply by V to get context vectors.
+
+What is the shape of the attention matrix in self-attention?;[batch_size, num_heads, seq_length, seq_length].
+
+How does multi-head attention parallelize computation?;By computing multiple attention functions in parallel, each with different learned projections.
+
+How is the output of multiple attention heads combined?;By concatenating the outputs from all heads and applying a linear transformation.
+
+What is the shape of Q, K, and V matrices in multi-head attention?;[batch_size, seq_length, head_size * num_heads], where head_size = embedding_dim / num_heads.
+
+Why do transformer models use residual connections?;To mitigate the vanishing gradient problem and allow for deeper networks by providing shortcuts for gradient flow.
+
+What is the "key" vector used for in self-attention?;To be compared with query vectors to determine attention scores between tokens.
+
+What is the "query" vector used for in self-attention?;To search for relevant information by computing compatibility with key vectors.
+
+What is the "value" vector used for in self-attention?;To contribute information weighted by attention scores to form the output representation.
+
+How does the attention mask work in causal attention?;By setting masked positions (future tokens) to large negative values before softmax, effectively zeroing those attention weights.
+
+What happens if the scale factor √(d_k) is not used in attention?;Dot products grow large in magnitude, pushing softmax gradients toward regions with extremely small gradients.
+
+What is the "scale dot-product attention" formula?;Attention(Q,K,V) = softmax(QK^T/√d_k)V.
+
+What is the main difference between BERT and GPT in terms of attention?;BERT uses bidirectional attention where tokens attend to all positions, while GPT uses causal attention where tokens only attend to previous positions.
+
+What is greedy decoding in GPT models?;Selecting the token with the highest probability at each step during text generation.
+
+How does nucleus sampling work in text generation?;By restricting token selection to the smallest set whose cumulative probability exceeds a threshold p.
+
+How are tokenized inputs converted to embeddings in a transformer?;By looking up token IDs in an embedding matrix to retrieve continuous vector representations.
+
+How does GPT handle context length limitations?;By truncating or sliding window approaches, though newer versions have increased context windows.
+
+How is position information incorporated in transformers without positional encodings?;It cannot be - some form of positional information is required since self-attention is inherently permutation-invariant.
+
+What is the advantage of learned positional embeddings over fixed sinusoidal encodings?;They can adapt to the specific patterns and requirements of the data and task.
+
+What is the expansion ratio in the feed-forward network of a transformer?;Typically 4, meaning the hidden dimension is 4 times the model dimension.
+
+What is the purpose of the final linear layer in GPT models?;To project the embedding dimension back to vocabulary size, producing logits for next-token prediction.
+
+What is the relationship between attention heads and embedding dimension?;The embedding dimension is typically divided equally among attention heads (e.g., 768/12 = 64-dimensional per head in GPT-2).
+
+How do we calculate the total number of parameters in a GPT model?;By summing parameters in token embeddings, positional embeddings, attention layers, feed-forward networks, layer norms, and output projection.
+
+Why is LayerNorm used before self-attention in modern transformers instead of after?;This "Pre-LN" approach improves training stability compared to the original "Post-LN" design.
