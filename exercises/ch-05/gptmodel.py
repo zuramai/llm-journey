@@ -29,29 +29,20 @@ class MultiHeadAttention(nn.Module):
         )
 
     def forward(self, x):
-        print(self.W_key)
-        print(x.shape)
         b, num_tokens, d_in = x.shape
         keys = self.W_key(x)
         queries = self.W_query(x)
         values = self.W_value(x)
-        print("keys shape:",keys)
         
         # We add a 'num_heads' dimension
         keys = keys.view(b, num_tokens, self.num_heads, self.head_dim)
         values = values.view(b, num_tokens, self.num_heads, self.head_dim)
         queries = queries.view(b, num_tokens, self.num_heads, self.head_dim)
 
-
-        print("keys after view shape:",keys.shape)
-
         # transpose from shape (b, num_tokens, num_heads, head_dim) to (b, num_heads, num_tokens, head_dim)
         keys = keys.transpose(1, 2)
         queries = queries.transpose(1, 2)
         values = values.transpose(1, 2)
-
-        print("keys after transposed shape:",keys.shape)
-
 
         attn_scores = queries @ keys.transpose(2, 3)
         mask_bool = self.mask.bool()[:num_tokens, :num_tokens]
@@ -127,7 +118,6 @@ class TransformerBlock(nn.Module):
         x += shortcut 
         x = self.norm2(x)
         x = self.ff(x)
-        print("x", x)
         x = self.drop_shortcut(x)
         x += shortcut 
         
